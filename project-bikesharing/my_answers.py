@@ -45,8 +45,8 @@ class NeuralNetwork(object):
         delta_weights_i_h = np.zeros(self.weights_input_to_hidden.shape)
         delta_weights_h_o = np.zeros(self.weights_hidden_to_output.shape)
         for X, y in zip(features, targets):
-            
-            final_outputs, hidden_outputs = self.forward_pass_train(X[:, None].T)  # Implement the forward pass function below
+
+            final_outputs, hidden_outputs = self.forward_pass_train(X)  # Implement the forward pass function below
             # Implement the backproagation function below
             delta_weights_i_h, delta_weights_h_o=  self.backpropagation(final_outputs, hidden_outputs, X, y, 
                                                                         delta_weights_i_h, delta_weights_h_o)
@@ -103,9 +103,9 @@ class NeuralNetwork(object):
 
         # TODO: Add Weight step (input to hidden) and Weight step (hidden to output).
         # Weight step (input to hidden)
-        delta_weights_i_h += np.dot(X[:,None], hidden_error_term)
+        delta_weights_i_h += np.dot(X[:,None], hidden_error_term[:, None].T)
         # Weight step (hidden to output)
-        delta_weights_h_o += np.dot(hidden_outputs.T, output_error_term)
+        delta_weights_h_o += np.dot(hidden_outputs[:, None], output_error_term[:, None])
         return delta_weights_i_h, delta_weights_h_o
 
     def update_weights(self, delta_weights_i_h, delta_weights_h_o, n_records):
@@ -146,7 +146,7 @@ class NeuralNetwork(object):
 #########################################################
 # Set your hyperparameters here
 ##########################################################
-iterations = 100
-learning_rate = 0.1
-hidden_nodes = 2
+iterations = 2000
+learning_rate = 1
+hidden_nodes = 10
 output_nodes = 1
